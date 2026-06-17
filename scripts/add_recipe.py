@@ -11,21 +11,29 @@ Usage non-interactif (depuis Claude) :
 Format JSON complet :
 {
   "name": "Tarte aux tomates",
-  "cuisine_type": "française",
   "dish_type": "plat",
   "servings": 4,
   "prep_time": 20,
   "cook_time": 30,
   "source_url": "https://...",
   "source_file": "sources/tarte-tomates.jpg",
+  "author": "maman",
+  "country_code": "FR",
   "notes": "Ajouter du basilic frais à la sortie du four.",
-  "tags": "été,végétarien,rapide",
+  "facets": {
+    "origine": "française",
+    "collection": "classique",
+    "saison": "été",
+    "regime": ["végétarien", "sans-gluten"]
+  },
   "ingredients": [
     {"name": "pâte brisée", "category": "epicerie", "quantity": 1, "unit": "pièce"},
     {"name": "tomate", "category": "legumes", "quantity": 4, "unit": "pièce"},
-    {"name": "moutarde", "category": "epicerie", "quantity": 2, "unit": "c. à soupe"},
-    {"name": "gruyère râpé", "category": "frais", "quantity": 100, "unit": "g"},
     {"name": "basilic frais", "category": "legumes", "quantity": null, "unit": null, "optional": true}
+  ],
+  "steps": [
+    {"instruction": "Préchauffer le four à 180°C.", "source": "original"},
+    {"instruction": "Étaler la pâte dans un moule.", "source": "original"}
   ]
 }
 """
@@ -70,9 +78,9 @@ def add_recipe(data: dict) -> int:
             """
             INSERT INTO recipes
                 (name, cuisine_type, dish_type, servings, prep_time, cook_time,
-                 source_url, source_file, author, notes, tags,
+                 source_url, source_file, author, notes,
                  country_code, rating, made_count, last_made)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 data["name"],
@@ -85,7 +93,6 @@ def add_recipe(data: dict) -> int:
                 data.get("source_file"),
                 data.get("author"),
                 data.get("notes"),
-                data.get("tags"),
                 data.get("country_code"),
                 data.get("rating"),
                 data.get("made_count", 0),
@@ -93,6 +100,14 @@ def add_recipe(data: dict) -> int:
             ),
         )
         recipe_id = cur.lastrowid
+
+        for tag_group, raw_values in (data.get("facets") or {}).items():
+            values = raw_values if isinstance(raw_values, list) else [raw_values]
+            for tag_value in values:
+                conn.execute(
+                    "INSERT OR IGNORE INTO recipe_tags (recipe_id, tag_group, tag_value) VALUES (?, ?, ?)",
+                    (recipe_id, tag_group, str(tag_value)),
+                )
 
         for ing in data.get("ingredients", []):
             ingredient_id = get_or_create_ingredient(

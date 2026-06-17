@@ -82,9 +82,25 @@ CREATE TABLE IF NOT EXISTS recipe_steps (
 );
 
 -- ─────────────────────────────────────────
+-- Tags à facettes
+-- ─────────────────────────────────────────
+-- Remplace la colonne `tags` (texte libre) de recipes.
+-- Groupes définis : origine | collection | saison | caractere | regime
+--                   occasion | evenement | ingredient-cle | style
+CREATE TABLE IF NOT EXISTS recipe_tags (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipe_id  INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+    tag_group  TEXT NOT NULL,  -- ex. "origine", "collection", "saison"
+    tag_value  TEXT NOT NULL,  -- ex. "turque", "kiyma", "été"
+    UNIQUE (recipe_id, tag_group, tag_value)
+);
+
+-- ─────────────────────────────────────────
 -- Index utiles
 -- ─────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_recipe ON recipe_ingredients(recipe_id);
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_ingredient ON recipe_ingredients(ingredient_id);
 CREATE INDEX IF NOT EXISTS idx_meal_plan_date ON meal_plan(planned_date);
 CREATE INDEX IF NOT EXISTS idx_recipe_steps_recipe ON recipe_steps(recipe_id);
+CREATE INDEX IF NOT EXISTS idx_recipe_tags_recipe ON recipe_tags(recipe_id);
+CREATE INDEX IF NOT EXISTS idx_recipe_tags_group_value ON recipe_tags(tag_group, tag_value);
