@@ -1,6 +1,6 @@
 import { Link } from '@/i18n/navigation';
+import { getAllRecipes } from '@/lib/queries';
 import {
-  allRecipes,
   COLLECTION_COLORS,
   COLLECTION_LABELS,
   getCollection,
@@ -24,7 +24,7 @@ const DISH_TYPE_LABELS: Record<string, string> = {
 export default async function RecettesPage({ searchParams }: Props) {
   const { collection, q } = await searchParams;
 
-  let recipes = allRecipes;
+  let recipes = await getAllRecipes();
 
   if (collection) {
     recipes = recipes.filter((r) => r.tags?.collection?.includes(collection));

@@ -1,5 +1,3 @@
-import recipesData from '@/data/recipes.json';
-
 export type Ingredient = {
   name: string;
   category: string | null;
@@ -35,18 +33,8 @@ export type Recipe = {
   tags: Record<string, string[]>;
 };
 
-export const allRecipes = recipesData as unknown as Recipe[];
-
-export function getRecipe(id: number): Recipe | undefined {
-  return allRecipes.find((r) => r.id === id);
-}
-
 export function getCollection(recipe: Recipe): string | null {
   return recipe.tags?.collection?.[0] ?? null;
-}
-
-export function filterByCollection(collection: string): Recipe[] {
-  return allRecipes.filter((r) => r.tags?.collection?.includes(collection));
 }
 
 export const COLLECTION_COLORS: Record<string, string> = {

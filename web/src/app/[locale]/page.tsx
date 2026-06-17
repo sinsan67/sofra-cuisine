@@ -1,14 +1,18 @@
 import { Link } from '@/i18n/navigation';
-import { allRecipes, COLLECTION_COLORS, COLLECTION_LABELS, getCollection } from '@/lib/recipes';
+import { getAllRecipes } from '@/lib/queries';
+import { COLLECTION_COLORS, COLLECTION_LABELS, getCollection } from '@/lib/recipes';
+
+export const dynamic = 'force-dynamic';
 
 const collections = ['kiyma', 'fitness', 'cocktail', 'ottolenghi'] as const;
 
-function collectionCount(col: string) {
-  return allRecipes.filter((r) => r.tags?.collection?.includes(col)).length;
-}
-
-export default function HomePage() {
+export default async function HomePage() {
+  const allRecipes = await getAllRecipes();
   const totalRecipes = allRecipes.length;
+
+  function collectionCount(col: string) {
+    return allRecipes.filter((r) => r.tags?.collection?.includes(col)).length;
+  }
 
   return (
     <div className="space-y-10">

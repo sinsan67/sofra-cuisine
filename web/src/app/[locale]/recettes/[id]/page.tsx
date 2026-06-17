@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
+import { getRecipeById } from '@/lib/queries';
 import {
-  getRecipe,
   getCollection,
   COLLECTION_COLORS,
   COLLECTION_LABELS,
@@ -24,7 +24,7 @@ const DISH_TYPE_LABELS: Record<string, string> = {
 
 export default async function RecettePage({ params }: Props) {
   const { id } = await params;
-  const recipe = getRecipe(Number(id));
+  const recipe = await getRecipeById(Number(id));
 
   if (!recipe) notFound();
 
