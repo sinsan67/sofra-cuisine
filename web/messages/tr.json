@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "recipes": "Tarifler"
+  },
+  "home": {
+    "title": "Sofra Cuisine",
+    "tagline": "Franco-Türk, fitness ve kokteyl tariflerim"
+  }
+}

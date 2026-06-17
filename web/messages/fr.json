@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "recipes": "Recettes"
+  },
+  "home": {
+    "title": "Sofra Cuisine",
+    "tagline": "Mes recettes franco-turques, fitness et cocktails"
+  }
+}
