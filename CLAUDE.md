@@ -13,8 +13,8 @@ Base personnelle de recettes franco-turques, fitness et cocktails.
 
 | Environnement | URL | Branche |
 |---|---|---|
-| Staging | (à remplir après Vercel) | `staging` |
-| Prod | (à remplir après Vercel) | `main` |
+| Staging | https://sofra-cuisine-git-staging-ssinanusa-gmailcoms-projects.vercel.app | `staging` |
+| Prod | https://sofra-cuisine.vercel.app | `main` |
 
 ## Architecture
 
