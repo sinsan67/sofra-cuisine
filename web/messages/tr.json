@@ -6,5 +6,21 @@
   "home": {
     "title": "Sofra Cuisine",
     "tagline": "Franco-Türk, fitness ve kokteyl tariflerim"
+  },
+  "recipes": {
+    "title": "Tarifler",
+    "all": "Tümü",
+    "noResults": "Tarif bulunamadı.",
+    "results": "{count} sonuç",
+    "resultsPlural": "{count} sonuç",
+    "back": "← Tüm tarifler",
+    "ingredients": "Malzemeler",
+    "preparation": "Hazırlanış",
+    "tips": "İpuçları & öneriler",
+    "tags": "Etiketler",
+    "portions": "{n} porsiyon",
+    "prep": "Hazırlık: {n} dk",
+    "cook": "Pişirme: {n} dk",
+    "total": "Toplam: {n} dk"
   }
 }
