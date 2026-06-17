@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Node (pour le dossier web/ à venir)
+node_modules/
+.next/
+.vercel/
+
+# Env
+.env
+.env.local
+.env*.local
+
+# Ressources sources (PDFs, photos — binaires lourds déjà traités)
+_ressources input/
+
+# IDE
+.vscode/
