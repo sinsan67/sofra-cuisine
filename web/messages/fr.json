@@ -6,5 +6,21 @@
   "home": {
     "title": "Sofra Cuisine",
     "tagline": "Mes recettes franco-turques, fitness et cocktails"
+  },
+  "recipes": {
+    "title": "Recettes",
+    "all": "Tout",
+    "noResults": "Aucune recette trouvée.",
+    "results": "{count} résultat",
+    "resultsPlural": "{count} résultats",
+    "back": "← Toutes les recettes",
+    "ingredients": "Ingrédients",
+    "preparation": "Préparation",
+    "tips": "Conseils & suggestions",
+    "tags": "Tags",
+    "portions": "{n} portions",
+    "prep": "Prép : {n} min",
+    "cook": "Cuisson : {n} min",
+    "total": "Total : {n} min"
   }
 }
