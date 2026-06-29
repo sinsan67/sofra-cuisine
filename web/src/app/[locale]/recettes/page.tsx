@@ -8,6 +8,7 @@ import {
 } from '@/lib/recipes';
 
 type Props = {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ collection?: string; q?: string }>;
 };
 
@@ -21,10 +22,11 @@ const DISH_TYPE_LABELS: Record<string, string> = {
   cocktail: 'Cocktail',
 };
 
-export default async function RecettesPage({ searchParams }: Props) {
+export default async function RecettesPage({ params, searchParams }: Props) {
+  const { locale } = await params;
   const { collection, q } = await searchParams;
 
-  let recipes = await getAllRecipes();
+  let recipes = await getAllRecipes(locale);
 
   if (collection) {
     recipes = recipes.filter((r) => r.tags?.collection?.includes(collection));

@@ -30,22 +30,52 @@ function assemble(
   });
 }
 
-export async function getAllRecipes(): Promise<Recipe[]> {
+export async function getAllRecipes(locale = 'fr'): Promise<Recipe[]> {
   const [raws, ings, steps, tags] = await Promise.all([
     sql`
-      SELECT id, name, notes, cuisine_type, dish_type, servings, prep_time, cook_time,
-             source_url, source_file, country_code, rating, made_count, last_made, author, created_at
-      FROM recipes
+      SELECT
+        r.id,
+        COALESCE(rt.name, r.name) AS name,
+        COALESCE(rt.notes, r.notes) AS notes,
+        r.cuisine_type,
+        r.dish_type,
+        r.servings,
+        r.prep_time,
+        r.cook_time,
+        r.source_url,
+        r.source_file,
+        r.country_code,
+        r.rating,
+        r.made_count,
+        r.last_made,
+        r.author,
+        r.created_at
+      FROM recipes r
+      LEFT JOIN recipe_translations rt
+        ON rt.recipe_id = r.id AND rt.locale = ${locale}
       ORDER BY name
     `,
     sql`
-      SELECT ri.recipe_id, i.name, i.category, ri.quantity, ri.unit
+      SELECT
+        ri.recipe_id,
+        COALESCE(it.name, i.name) AS name,
+        i.category,
+        ri.quantity,
+        ri.unit
       FROM recipe_ingredients ri
       JOIN ingredients i ON i.id = ri.ingredient_id
+      LEFT JOIN ingredient_translations it
+        ON it.ingredient_id = i.id AND it.locale = ${locale}
     `,
     sql`
-      SELECT recipe_id, step_number, instruction, source
-      FROM recipe_steps
+      SELECT
+        rs.recipe_id,
+        rs.step_number,
+        COALESCE(rst.instruction, rs.instruction) AS instruction,
+        rs.source
+      FROM recipe_steps rs
+      LEFT JOIN recipe_step_translations rst
+        ON rst.recipe_step_id = rs.id AND rst.locale = ${locale}
       ORDER BY recipe_id, step_number
     `,
     sql`SELECT recipe_id, tag_group, tag_value FROM recipe_tags`,
@@ -59,22 +89,55 @@ export async function getAllRecipes(): Promise<Recipe[]> {
   );
 }
 
-export async function getRecipeById(id: number): Promise<Recipe | undefined> {
+export async function getRecipeById(id: number, locale = 'fr'): Promise<Recipe | undefined> {
   const [raws, ings, steps, tags] = await Promise.all([
     sql`
-      SELECT id, name, notes, cuisine_type, dish_type, servings, prep_time, cook_time,
-             source_url, source_file, country_code, rating, made_count, last_made, author, created_at
-      FROM recipes WHERE id = ${id}
+      SELECT
+        r.id,
+        COALESCE(rt.name, r.name) AS name,
+        COALESCE(rt.notes, r.notes) AS notes,
+        r.cuisine_type,
+        r.dish_type,
+        r.servings,
+        r.prep_time,
+        r.cook_time,
+        r.source_url,
+        r.source_file,
+        r.country_code,
+        r.rating,
+        r.made_count,
+        r.last_made,
+        r.author,
+        r.created_at
+      FROM recipes r
+      LEFT JOIN recipe_translations rt
+        ON rt.recipe_id = r.id AND rt.locale = ${locale}
+      WHERE r.id = ${id}
     `,
     sql`
-      SELECT ri.recipe_id, i.name, i.category, ri.quantity, ri.unit
+      SELECT
+        ri.recipe_id,
+        COALESCE(it.name, i.name) AS name,
+        i.category,
+        ri.quantity,
+        ri.unit
       FROM recipe_ingredients ri
       JOIN ingredients i ON i.id = ri.ingredient_id
+      LEFT JOIN ingredient_translations it
+        ON it.ingredient_id = i.id AND it.locale = ${locale}
       WHERE ri.recipe_id = ${id}
     `,
     sql`
-      SELECT recipe_id, step_number, instruction, source
-      FROM recipe_steps WHERE recipe_id = ${id} ORDER BY step_number
+      SELECT
+        rs.recipe_id,
+        rs.step_number,
+        COALESCE(rst.instruction, rs.instruction) AS instruction,
+        rs.source
+      FROM recipe_steps rs
+      LEFT JOIN recipe_step_translations rst
+        ON rst.recipe_step_id = rs.id AND rst.locale = ${locale}
+      WHERE rs.recipe_id = ${id}
+      ORDER BY step_number
     `,
     sql`SELECT recipe_id, tag_group, tag_value FROM recipe_tags WHERE recipe_id = ${id}`,
   ]);

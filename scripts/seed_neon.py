@@ -128,6 +128,60 @@ def main():
             )
             print(f"  {len(rows)} étapes")
 
+        # ── recipe_translations ──────────────────────────────────────────────
+        rows = sqlite.execute(
+            "SELECT id, recipe_id, locale, name, notes FROM recipe_translations"
+        ).fetchall()
+        if rows:
+            cur.executemany(
+                """
+                INSERT INTO recipe_translations (id, recipe_id, locale, name, notes)
+                VALUES (%s,%s,%s,%s,%s)
+                ON CONFLICT (recipe_id, locale) DO NOTHING
+                """,
+                [tuple(r) for r in rows],
+            )
+            cur.execute(
+                "SELECT setval('recipe_translations_id_seq', (SELECT MAX(id) FROM recipe_translations))"
+            )
+            print(f"  {len(rows)} traductions de recettes")
+
+        # ── ingredient_translations ──────────────────────────────────────────
+        rows = sqlite.execute(
+            "SELECT id, ingredient_id, locale, name FROM ingredient_translations"
+        ).fetchall()
+        if rows:
+            cur.executemany(
+                """
+                INSERT INTO ingredient_translations (id, ingredient_id, locale, name)
+                VALUES (%s,%s,%s,%s)
+                ON CONFLICT (ingredient_id, locale) DO NOTHING
+                """,
+                [tuple(r) for r in rows],
+            )
+            cur.execute(
+                "SELECT setval('ingredient_translations_id_seq', (SELECT MAX(id) FROM ingredient_translations))"
+            )
+            print(f"  {len(rows)} traductions d'ingrédients")
+
+        # ── recipe_step_translations ─────────────────────────────────────────
+        rows = sqlite.execute(
+            "SELECT id, recipe_step_id, locale, instruction FROM recipe_step_translations"
+        ).fetchall()
+        if rows:
+            cur.executemany(
+                """
+                INSERT INTO recipe_step_translations (id, recipe_step_id, locale, instruction)
+                VALUES (%s,%s,%s,%s)
+                ON CONFLICT (recipe_step_id, locale) DO NOTHING
+                """,
+                [tuple(r) for r in rows],
+            )
+            cur.execute(
+                "SELECT setval('recipe_step_translations_id_seq', (SELECT MAX(id) FROM recipe_step_translations))"
+            )
+            print(f"  {len(rows)} traductions d'étapes")
+
         # ── recipe_tags ───────────────────────────────────────────────────────
         rows = sqlite.execute(
             "SELECT id, recipe_id, tag_group, tag_value FROM recipe_tags"

@@ -61,6 +61,31 @@ CREATE TABLE IF NOT EXISTS recipe_steps (
     source        TEXT NOT NULL DEFAULT 'original'
 );
 
+CREATE TABLE IF NOT EXISTS recipe_translations (
+    id         SERIAL PRIMARY KEY,
+    recipe_id  INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+    locale     TEXT NOT NULL,
+    name       TEXT NOT NULL,
+    notes      TEXT,
+    UNIQUE (recipe_id, locale)
+);
+
+CREATE TABLE IF NOT EXISTS ingredient_translations (
+    id             SERIAL PRIMARY KEY,
+    ingredient_id  INTEGER NOT NULL REFERENCES ingredients(id) ON DELETE CASCADE,
+    locale         TEXT NOT NULL,
+    name           TEXT NOT NULL,
+    UNIQUE (ingredient_id, locale)
+);
+
+CREATE TABLE IF NOT EXISTS recipe_step_translations (
+    id              SERIAL PRIMARY KEY,
+    recipe_step_id  INTEGER NOT NULL REFERENCES recipe_steps(id) ON DELETE CASCADE,
+    locale          TEXT NOT NULL,
+    instruction     TEXT NOT NULL,
+    UNIQUE (recipe_step_id, locale)
+);
+
 CREATE TABLE IF NOT EXISTS recipe_tags (
     id         SERIAL PRIMARY KEY,
     recipe_id  INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
@@ -73,5 +98,8 @@ CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_recipe    ON recipe_ingredient
 CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_ingredient ON recipe_ingredients(ingredient_id);
 CREATE INDEX IF NOT EXISTS idx_meal_plan_date               ON meal_plan(planned_date);
 CREATE INDEX IF NOT EXISTS idx_recipe_steps_recipe          ON recipe_steps(recipe_id);
+CREATE INDEX IF NOT EXISTS idx_recipe_translations_recipe_locale ON recipe_translations(recipe_id, locale);
+CREATE INDEX IF NOT EXISTS idx_ingredient_translations_ingredient_locale ON ingredient_translations(ingredient_id, locale);
+CREATE INDEX IF NOT EXISTS idx_recipe_step_translations_step_locale ON recipe_step_translations(recipe_step_id, locale);
 CREATE INDEX IF NOT EXISTS idx_recipe_tags_recipe           ON recipe_tags(recipe_id);
 CREATE INDEX IF NOT EXISTS idx_recipe_tags_group_value      ON recipe_tags(tag_group, tag_value);
