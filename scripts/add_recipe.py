@@ -109,6 +109,7 @@ def add_recipe(data: dict) -> int:
                     (recipe_id, tag_group, str(tag_value)),
                 )
 
+        ingredient_ids: list[int] = []
         for ing in data.get("ingredients", []):
             ingredient_id = get_or_create_ingredient(
                 conn,
@@ -116,6 +117,7 @@ def add_recipe(data: dict) -> int:
                 category=ing.get("category", "autre"),
                 default_unit=ing.get("unit"),
             )
+            ingredient_ids.append(ingredient_id)
             conn.execute(
                 """
                 INSERT INTO recipe_ingredients
@@ -132,6 +134,7 @@ def add_recipe(data: dict) -> int:
                 ),
             )
 
+        step_ids: list[int] = []
         for i, step in enumerate(data.get("steps", []), start=1):
             if isinstance(step, dict):
                 instruction = step["instruction"]
@@ -139,10 +142,47 @@ def add_recipe(data: dict) -> int:
             else:
                 instruction = step
                 source = "original"
-            conn.execute(
+            cur = conn.execute(
                 "INSERT INTO recipe_steps (recipe_id, step_number, instruction, source) VALUES (?, ?, ?, ?)",
                 (recipe_id, i, instruction, source),
             )
+            step_ids.append(cur.lastrowid)
+
+        for locale, translation in (data.get("translations") or {}).items():
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO recipe_translations (recipe_id, locale, name, notes)
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    recipe_id,
+                    locale,
+                    translation.get("name", data["name"]),
+                    translation.get("notes"),
+                ),
+            )
+
+            for ingredient_id, translated_name in zip(
+                ingredient_ids, translation.get("ingredients", [])
+            ):
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO ingredient_translations (ingredient_id, locale, name)
+                    VALUES (?, ?, ?)
+                    """,
+                    (ingredient_id, locale, translated_name),
+                )
+
+            for recipe_step_id, translated_instruction in zip(
+                step_ids, translation.get("steps", [])
+            ):
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO recipe_step_translations (recipe_step_id, locale, instruction)
+                    VALUES (?, ?, ?)
+                    """,
+                    (recipe_step_id, locale, translated_instruction),
+                )
 
         steps_count = len(data.get("steps", []))
         print(f"Recette ajoutée : \"{data['name']}\" (id={recipe_id}, {steps_count} étapes)")

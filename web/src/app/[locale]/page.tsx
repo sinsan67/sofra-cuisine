@@ -6,8 +6,13 @@ export const dynamic = 'force-dynamic';
 
 const collections = ['kiyma', 'fitness', 'cocktail', 'ottolenghi'] as const;
 
-export default async function HomePage() {
-  const allRecipes = await getAllRecipes();
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  const allRecipes = await getAllRecipes(locale);
   const totalRecipes = allRecipes.length;
 
   function collectionCount(col: string) {

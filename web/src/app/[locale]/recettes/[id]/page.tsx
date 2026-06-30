@@ -23,8 +23,8 @@ const DISH_TYPE_LABELS: Record<string, string> = {
 };
 
 export default async function RecettePage({ params }: Props) {
-  const { id } = await params;
-  const recipe = await getRecipeById(Number(id));
+  const { locale, id } = await params;
+  const recipe = await getRecipeById(Number(id), locale);
 
   if (!recipe) notFound();
 
