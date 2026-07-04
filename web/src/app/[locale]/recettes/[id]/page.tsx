@@ -34,7 +34,7 @@ type IngredientGroup = {
 const INGREDIENT_CATEGORY_LABELS: Record<SupportedLocale, Record<string, string>> = {
   fr: {
     autre: 'Autres',
-    epicerie: 'Epicerie',
+    epicerie: 'Épicerie',
     frais: 'Frais',
     fruits: 'Fruits',
     legumes: 'Légumes',
