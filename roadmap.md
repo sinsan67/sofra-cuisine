@@ -6,6 +6,7 @@
 - [x] 6 recettes originales + étapes (original/suggested) en base
 - [x] 4 recettes fitness en base (ingrédients à compléter)
 - [x] 5 cocktails au mastic en base (complets)
+- [ ] Cadrer puis prototyper une page admin d'import de recettes (URL + photo) protégée par mot de passe léger côté serveur
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
 - [ ] Traiter le PDF Ottolenghi (_ressources input/)
@@ -26,6 +27,12 @@
 - [x] Mise en page ingrédients en 2 colonnes sur desktop
 - [ ] Ajouter une vraie barre de recherche utilisateur dans l'interface
 - [ ] Valider le rendu mobile de la fiche recette sur appareil réel
+
+### Import admin
+- [ ] Ajouter une page `/admin/import` protégée par mot de passe simple pour usage privé
+- [ ] Supporter 2 entrées : URL de recette et upload photo
+- [ ] Ajouter un écran de revue avant toute écriture en base
+- [ ] Utiliser comme support de test UX les captures bureau du 2026-07-04 12.05.57 et 12.19.20
 
 ### Affichage original / enrichi ⭐ (idée clé S003)
 - [ ] Afficher la recette originale par défaut (étapes `source='original'`)
