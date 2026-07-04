@@ -9,6 +9,7 @@
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
 - [ ] Traiter le PDF Ottolenghi (_ressources input/)
+- [ ] Vérifier la compaction des ingrédients sur mobile réel et décider s'il faut un niveau 2 (accordéons, repli par catégorie, ou densification supplémentaire)
 
 ## Prochain sprint (avant bootstrap web)
 
@@ -19,8 +20,12 @@
 ## Web — fonctionnalités (stack : Next.js + Neon + Vercel)
 
 ### Affichage recettes
-- [ ] Liste des recettes + barre de recherche
-- [ ] Page recette individuelle
+- [x] Liste des recettes + filtres de collection
+- [x] Page recette individuelle
+- [x] Ingrédients groupés par catégorie avec mise en page compacte
+- [x] Mise en page ingrédients en 2 colonnes sur desktop
+- [ ] Ajouter une vraie barre de recherche utilisateur dans l'interface
+- [ ] Valider le rendu mobile de la fiche recette sur appareil réel
 
 ### Affichage original / enrichi ⭐ (idée clé S003)
 - [ ] Afficher la recette originale par défaut (étapes `source='original'`)
