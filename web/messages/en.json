@@ -22,5 +22,70 @@
     "prep": "Prep: {n} min",
     "cook": "Cook: {n} min",
     "total": "Total: {n} min"
+  },
+  "adminImport": {
+    "eyebrow": "Private admin",
+    "title": "Import a recipe",
+    "intro": "MVP admin flow: a source goes in, a draft comes out, then a human review decides what happens next. Nothing is written to the database yet.",
+    "logout": "Close session",
+    "principles": {
+      "securityTitle": "MVP security",
+      "securityBody": "Route kept out of public navigation, protected with a server password and an HTTP-only cookie.",
+      "reviewTitle": "Review before DB",
+      "reviewBody": "Automatic import only prepares a readable draft. Human validation stays mandatory.",
+      "scopeTitle": "S013 scope",
+      "scopeBody": "URL mode is prototyped now. Photo mode is intentionally deferred."
+    },
+    "config": {
+      "title": "Configuration required",
+      "body": "Add the following environment variable locally and on Vercel to enable the admin route."
+    },
+    "login": {
+      "title": "Admin access",
+      "body": "Enter the admin password to open the import prototype.",
+      "passwordLabel": "Password",
+      "submit": "Open importer",
+      "error": "Invalid password."
+    },
+    "source": {
+      "eyebrow": "Source",
+      "title": "Import from a URL",
+      "body": "Paste a public recipe URL. The server will try to extract title, timings, ingredients, and steps.",
+      "urlLabel": "Recipe URL",
+      "submit": "Generate draft"
+    },
+    "photo": {
+      "eyebrow": "Next step",
+      "title": "Import from a photo",
+      "body": "The UX block is already reserved for the future photo flow, but no upload is wired in this first prototype.",
+      "badge": "Soon"
+    },
+    "preview": {
+      "eyebrow": "Extracted draft",
+      "openSource": "Open source",
+      "untitled": "Untitled detected recipe",
+      "reviewReminder": "Review, correct, and only then consider saving.",
+      "warningsTitle": "Things to verify",
+      "summaryTitle": "Detected summary",
+      "ingredientsTitle": "Detected ingredients",
+      "stepsTitle": "Detected steps",
+      "emptyIngredients": "No structured ingredients detected.",
+      "emptySteps": "No structured steps detected.",
+      "errorTitle": "Import failed:",
+      "errorFallback": "An unexpected error happened while analyzing the page.",
+      "fields": {
+        "author": "Author",
+        "servings": "Servings",
+        "prepTime": "Prep",
+        "cookTime": "Cook",
+        "totalTime": "Total",
+        "notes": "Notes"
+      }
+    },
+    "review": {
+      "title": "Manual review screen",
+      "body": "The final safeguard is still missing: precise editing followed by intentional database save. The button stays disabled until that step is designed properly.",
+      "cta": "Saving soon"
+    }
   }
 }

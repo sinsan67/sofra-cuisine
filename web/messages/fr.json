@@ -22,5 +22,70 @@
     "prep": "Prép : {n} min",
     "cook": "Cuisson : {n} min",
     "total": "Total : {n} min"
+  },
+  "adminImport": {
+    "eyebrow": "Admin prive",
+    "title": "Importer une recette",
+    "intro": "Flux MVP reserve a l'admin : une source entre, un brouillon sort, puis une revue humaine decide de la suite. Rien n'est enregistre en base a ce stade.",
+    "logout": "Fermer la session",
+    "principles": {
+      "securityTitle": "Securite MVP",
+      "securityBody": "Route non exposee dans la navigation publique, acces protege par mot de passe serveur et cookie HTTP-only.",
+      "reviewTitle": "Revue avant base",
+      "reviewBody": "L'import automatique sert uniquement a preparer un brouillon lisible. La validation humaine reste obligatoire.",
+      "scopeTitle": "Perimetre S013",
+      "scopeBody": "Le mode URL est prototype maintenant. Le mode photo est reserve pour l'etape suivante."
+    },
+    "config": {
+      "title": "Configuration requise",
+      "body": "Ajoute la variable d'environnement suivante en local et sur Vercel pour activer la route admin."
+    },
+    "login": {
+      "title": "Acces admin",
+      "body": "Entre le mot de passe admin pour ouvrir le prototype d'import.",
+      "passwordLabel": "Mot de passe",
+      "submit": "Ouvrir l'import",
+      "error": "Mot de passe invalide."
+    },
+    "source": {
+      "eyebrow": "Source",
+      "title": "Importer depuis une URL",
+      "body": "Colle l'URL d'une recette publique. Le serveur essaie d'en extraire le titre, les temps, les ingredients et les etapes.",
+      "urlLabel": "URL de recette",
+      "submit": "Generer le brouillon"
+    },
+    "photo": {
+      "eyebrow": "Etape suivante",
+      "title": "Importer depuis une photo",
+      "body": "Le bloc UX est deja reserve pour le futur flux photo, mais aucun upload n'est branche dans ce premier prototype.",
+      "badge": "Bientot"
+    },
+    "preview": {
+      "eyebrow": "Brouillon extrait",
+      "openSource": "Ouvrir la source",
+      "untitled": "Recette sans titre detecte",
+      "reviewReminder": "Relire, corriger, puis seulement apres penser a l'enregistrement.",
+      "warningsTitle": "Points a verifier",
+      "summaryTitle": "Resume detecte",
+      "ingredientsTitle": "Ingredients detectes",
+      "stepsTitle": "Etapes detectees",
+      "emptyIngredients": "Aucun ingredient structure detecte.",
+      "emptySteps": "Aucune etape structuree detectee.",
+      "errorTitle": "Import impossible :",
+      "errorFallback": "Une erreur inattendue est survenue pendant l'analyse de la page.",
+      "fields": {
+        "author": "Auteur",
+        "servings": "Portions",
+        "prepTime": "Preparation",
+        "cookTime": "Cuisson",
+        "totalTime": "Total",
+        "notes": "Notes"
+      }
+    },
+    "review": {
+      "title": "Ecran de revue manuelle",
+      "body": "Le dernier garde-fou manque encore : edition fine puis enregistrement volontaire en base. Le bouton reste volontairement desactive tant que cette etape n'est pas concue proprement.",
+      "cta": "Enregistrement bientot"
+    }
   }
 }

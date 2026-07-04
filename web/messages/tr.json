@@ -22,5 +22,70 @@
     "prep": "Hazırlık: {n} dk",
     "cook": "Pişirme: {n} dk",
     "total": "Toplam: {n} dk"
+  },
+  "adminImport": {
+    "eyebrow": "Ozel admin",
+    "title": "Tarif ice aktar",
+    "intro": "MVP admin akisi: bir kaynak girer, bir taslak cikar, sonra insan incelemesi sonraki adimi belirler. Bu asamada veritabanina hicbir sey yazilmaz.",
+    "logout": "Oturumu kapat",
+    "principles": {
+      "securityTitle": "MVP guvenligi",
+      "securityBody": "Rota genel gezinmede gosterilmez; sunucu sifresi ve HTTP-only cookie ile korunur.",
+      "reviewTitle": "DB once inceleme",
+      "reviewBody": "Otomatik ice aktarma sadece okunabilir bir taslak hazirlar. Insan dogrulamasi zorunlu kalir.",
+      "scopeTitle": "S013 kapsami",
+      "scopeBody": "URL modu simdi prototiplendi. Foto modunun sonraya birakilmasi bilincli."
+    },
+    "config": {
+      "title": "Gerekli yapilandirma",
+      "body": "Admin rotasini etkinlestirmek icin bu ortam degiskenini yerelde ve Vercel'de ekleyin."
+    },
+    "login": {
+      "title": "Admin erisimi",
+      "body": "Ice aktarma prototipini acmak icin admin sifresini girin.",
+      "passwordLabel": "Sifre",
+      "submit": "Ice aktariciyi ac",
+      "error": "Gecersiz sifre."
+    },
+    "source": {
+      "eyebrow": "Kaynak",
+      "title": "URL'den ice aktar",
+      "body": "Herkese acik bir tarif URL'si yapistirin. Sunucu baslik, sure, malzeme ve adimlari cikarmayi dener.",
+      "urlLabel": "Tarif URL'si",
+      "submit": "Taslak olustur"
+    },
+    "photo": {
+      "eyebrow": "Sonraki adim",
+      "title": "Fotograftan ice aktar",
+      "body": "Bu UX blogu gelecekteki fotograf akisi icin ayrildi, ancak bu ilk prototipte yukleme baglanmadi.",
+      "badge": "Yakinda"
+    },
+    "preview": {
+      "eyebrow": "Cikarilan taslak",
+      "openSource": "Kaynagi ac",
+      "untitled": "Baslik algilanamadi",
+      "reviewReminder": "Gozden gecir, duzelt, sonra kaydetmeyi dusun.",
+      "warningsTitle": "Kontrol edilmesi gerekenler",
+      "summaryTitle": "Algilanan ozet",
+      "ingredientsTitle": "Algilanan malzemeler",
+      "stepsTitle": "Algilanan adimlar",
+      "emptyIngredients": "Yapilandirilmis malzeme algilanamadi.",
+      "emptySteps": "Yapilandirilmis adim algilanamadi.",
+      "errorTitle": "Ice aktarma basarisiz:",
+      "errorFallback": "Sayfa analiz edilirken beklenmeyen bir hata olustu.",
+      "fields": {
+        "author": "Yazar",
+        "servings": "Porsiyon",
+        "prepTime": "Hazirlik",
+        "cookTime": "Pisirme",
+        "totalTime": "Toplam",
+        "notes": "Notlar"
+      }
+    },
+    "review": {
+      "title": "Manuel inceleme ekrani",
+      "body": "Son guvenlik adimi hala eksik: ayrintili duzenleme ve bilincli veritabani kaydi. Bu adim duzgun tasarlanana kadar dugme bilincli olarak pasif kalir.",
+      "cta": "Kaydetme yakinda"
+    }
   }
 }
