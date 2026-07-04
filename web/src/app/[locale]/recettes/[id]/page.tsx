@@ -13,6 +13,8 @@ type Props = {
   params: Promise<{ locale: string; id: string }>;
 };
 
+type SupportedLocale = 'fr' | 'en' | 'tr';
+
 const DISH_TYPE_LABELS: Record<string, string> = {
   plat: 'Plat',
   entrée: 'Entrée',
@@ -29,26 +31,67 @@ type IngredientGroup = {
   items: Ingredient[];
 };
 
-function formatIngredientCategory(category: string | null): string {
-  if (!category) return 'Autres';
+const INGREDIENT_CATEGORY_LABELS: Record<SupportedLocale, Record<string, string>> = {
+  fr: {
+    autre: 'Autres',
+    epicerie: 'Epicerie',
+    frais: 'Frais',
+    fruits: 'Fruits',
+    legumes: 'Légumes',
+    surgele: 'Surgelé',
+    viande: 'Viande',
+  },
+  en: {
+    autre: 'Other',
+    epicerie: 'Pantry',
+    frais: 'Fresh',
+    fruits: 'Fruit',
+    legumes: 'Vegetables',
+    surgele: 'Frozen',
+    viande: 'Meat',
+  },
+  tr: {
+    autre: 'Diger',
+    epicerie: 'Kiler',
+    frais: 'Taze',
+    fruits: 'Meyve',
+    legumes: 'Sebze',
+    surgele: 'Donmus',
+    viande: 'Et',
+  },
+};
 
-  return category
+function getSupportedLocale(locale: string): SupportedLocale {
+  if (locale === 'en' || locale === 'tr') return locale;
+  return 'fr';
+}
+
+function formatIngredientCategory(category: string | null, locale: SupportedLocale): string {
+  const key = category ?? 'autre';
+  const localizedLabel = INGREDIENT_CATEGORY_LABELS[locale][key];
+
+  if (localizedLabel) return localizedLabel;
+
+  return key
     .split(/[_-]/)
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
 }
 
-function groupIngredientsByCategory(ingredients: Ingredient[]): IngredientGroup[] {
+function groupIngredientsByCategory(
+  ingredients: Ingredient[],
+  locale: SupportedLocale,
+): IngredientGroup[] {
   const groups = new Map<string, IngredientGroup>();
 
   for (const ingredient of ingredients) {
-    const key = ingredient.category ?? 'autres';
+    const key = ingredient.category ?? 'autre';
 
     if (!groups.has(key)) {
       groups.set(key, {
         key,
-        label: formatIngredientCategory(ingredient.category),
+        label: formatIngredientCategory(ingredient.category, locale),
         items: [],
       });
     }
@@ -57,9 +100,9 @@ function groupIngredientsByCategory(ingredients: Ingredient[]): IngredientGroup[
   }
 
   return Array.from(groups.values()).sort((a, b) => {
-    if (a.key === 'autres') return 1;
-    if (b.key === 'autres') return -1;
-    return a.label.localeCompare(b.label, 'fr');
+    if (a.key === 'autre') return 1;
+    if (b.key === 'autre') return -1;
+    return a.label.localeCompare(b.label, locale);
   });
 }
 
@@ -74,7 +117,8 @@ export default async function RecettePage({ params }: Props) {
 
   const originalSteps = recipe.steps.filter((s) => s.source === 'original');
   const suggestedSteps = recipe.steps.filter((s) => s.source === 'suggested');
-  const ingredientGroups = groupIngredientsByCategory(recipe.ingredients);
+  const supportedLocale = getSupportedLocale(locale);
+  const ingredientGroups = groupIngredientsByCategory(recipe.ingredients, supportedLocale);
 
   return (
     <div className="space-y-8">
