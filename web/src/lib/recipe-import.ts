@@ -39,6 +39,20 @@ export type RecipeImportDraft = {
   warnings: string[];
 };
 
+export type RecipeReviewPayload = {
+  name: string;
+  author: string | null;
+  notes: string | null;
+  servings: number | null;
+  prepTime: number | null;
+  cookTime: number | null;
+  sourceUrl: string | null;
+  cuisineType: string | null;
+  dishType: string | null;
+  ingredients: ImportedIngredient[];
+  steps: ImportedStep[];
+};
+
 function decodeHtmlEntities(value: string): string {
   return value
     .replace(/&nbsp;/g, ' ')
@@ -245,4 +259,51 @@ export async function buildRecipeImportDraftFromUrl(inputUrl: string): Promise<R
   }
 
   return draft;
+}
+
+function normalizeOptionalText(value: string | null | undefined): string | null {
+  const normalized = normalizeText(value);
+  return normalized && normalized.length > 0 ? normalized : null;
+}
+
+function normalizeOptionalInteger(value: string | null | undefined): number | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  const number = Number(trimmed.replace(',', '.'));
+  if (!Number.isFinite(number) || number <= 0) return null;
+
+  return Math.round(number);
+}
+
+export function buildRecipeReviewPayload(formData: FormData): RecipeReviewPayload {
+  const ingredients = String(formData.get('ingredientsText') ?? '')
+    .split('\n')
+    .map((line) => normalizeOptionalText(line))
+    .filter((line): line is string => Boolean(line))
+    .map((text) => ({ text }));
+
+  const steps = String(formData.get('stepsText') ?? '')
+    .split('\n')
+    .map((line) => normalizeOptionalText(line))
+    .filter((line): line is string => Boolean(line))
+    .map((instruction, index) => ({
+      step: index + 1,
+      instruction,
+    }));
+
+  return {
+    name: normalizeOptionalText(String(formData.get('name') ?? '')) ?? 'Recette sans titre',
+    author: normalizeOptionalText(String(formData.get('author') ?? '')),
+    notes: normalizeOptionalText(String(formData.get('notes') ?? '')),
+    servings: normalizeOptionalInteger(String(formData.get('servings') ?? '')),
+    prepTime: normalizeOptionalInteger(String(formData.get('prepTime') ?? '')),
+    cookTime: normalizeOptionalInteger(String(formData.get('cookTime') ?? '')),
+    sourceUrl: normalizeOptionalText(String(formData.get('sourceUrl') ?? '')),
+    cuisineType: normalizeOptionalText(String(formData.get('cuisineType') ?? '')),
+    dishType: normalizeOptionalText(String(formData.get('dishType') ?? '')),
+    ingredients,
+    steps,
+  };
 }

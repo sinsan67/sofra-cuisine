@@ -1,7 +1,8 @@
 {
   "nav": {
     "home": "Ana Sayfa",
-    "recipes": "Tarifler"
+    "recipes": "Tarifler",
+    "import": "Ice aktar"
   },
   "home": {
     "title": "Sofra Cuisine",
@@ -26,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Ozel admin",
     "title": "Tarif ice aktar",
-    "intro": "MVP admin akisi: bir kaynak girer, bir taslak cikar, sonra insan incelemesi sonraki adimi belirler. Bu asamada veritabanina hicbir sey yazilmaz.",
+    "intro": "MVP admin akisi: bir kaynak girer, bir taslak cikar, sonra insan incelemesi sonraki adimi belirler. URL ice aktarma artik gozden gecirilip kaydedilebilir; fotograf akisi sonraki adimdir.",
     "logout": "Oturumu kapat",
     "principles": {
       "securityTitle": "MVP guvenligi",
@@ -60,6 +61,11 @@
       "body": "Bu UX blogu gelecekteki fotograf akisi icin ayrildi, ancak bu ilk prototipte yukleme baglanmadi.",
       "badge": "Yakinda"
     },
+    "saved": {
+      "title": "Tarif kaydedildi.",
+      "body": "#{id} numarali tarif veritabanina eklendi.",
+      "open": "Tarifi ac"
+    },
     "preview": {
       "eyebrow": "Cikarilan taslak",
       "openSource": "Kaynagi ac",
@@ -83,9 +89,20 @@
       }
     },
     "review": {
-      "title": "Manuel inceleme ekrani",
-      "body": "Son guvenlik adimi hala eksik: ayrintili duzenleme ve bilincli veritabani kaydi. Bu adim duzgun tasarlanana kadar dugme bilincli olarak pasif kalir.",
-      "cta": "Kaydetme yakinda"
+      "title": "Kayit oncesi manuel inceleme",
+      "body": "Taslagi gerektigi kadar duzelt. Her malzeme bir satirda, her adim bir satirda kalsin. Kayit sonrasi veritabaninda gercek bir tarif olusur.",
+      "cta": "Veritabanina kaydet",
+      "editableBadge": "Duzenlenebilir",
+      "ingredientsHelp": "Her satirda tek bir malzeme tut. Bu MVP'de her satir tarifte oldugu gibi korunur.",
+      "stepsHelp": "Her satirda tek bir adim tut. Satir sirasi hazirlama sirasi olur.",
+      "errorTitle": "Kayit basarisiz:",
+      "errorBody": "taslak en azindan bir basliga sahip olmali.",
+      "fields": {
+        "name": "Ad",
+        "cuisineType": "Mutfak / aile",
+        "dishType": "Yemek tipi",
+        "sourceUrl": "Kaynak URL"
+      }
     }
   }
 }

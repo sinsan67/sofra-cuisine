@@ -1,7 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "recipes": "Recipes"
+    "recipes": "Recipes",
+    "import": "Import"
   },
   "home": {
     "title": "Sofra Cuisine",
@@ -26,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Private admin",
     "title": "Import a recipe",
-    "intro": "MVP admin flow: a source goes in, a draft comes out, then a human review decides what happens next. Nothing is written to the database yet.",
+    "intro": "MVP admin flow: a source goes in, a draft comes out, then a human review decides what happens next. URL imports can now be reviewed and saved; photo import comes next.",
     "logout": "Close session",
     "principles": {
       "securityTitle": "MVP security",
@@ -60,6 +61,11 @@
       "body": "The UX block is already reserved for the future photo flow, but no upload is wired in this first prototype.",
       "badge": "Soon"
     },
+    "saved": {
+      "title": "Recipe saved.",
+      "body": "Recipe #{id} was created in the database.",
+      "open": "Open recipe"
+    },
     "preview": {
       "eyebrow": "Extracted draft",
       "openSource": "Open source",
@@ -83,9 +89,20 @@
       }
     },
     "review": {
-      "title": "Manual review screen",
-      "body": "The final safeguard is still missing: precise editing followed by intentional database save. The button stays disabled until that step is designed properly.",
-      "cta": "Saving soon"
+      "title": "Manual review before saving",
+      "body": "Correct the draft as much as needed. Keep one ingredient per line and one step per line. Saving then creates a real recipe in the database.",
+      "cta": "Save to database",
+      "editableBadge": "Editable",
+      "ingredientsHelp": "Keep one ingredient per line. In this MVP, each line is preserved as-is in the recipe.",
+      "stepsHelp": "Keep one step per line. Line order becomes preparation order.",
+      "errorTitle": "Save failed:",
+      "errorBody": "the draft must at least have a title.",
+      "fields": {
+        "name": "Name",
+        "cuisineType": "Cuisine / family",
+        "dishType": "Dish type",
+        "sourceUrl": "Source URL"
+      }
     }
   }
 }

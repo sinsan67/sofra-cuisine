@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
+import { hasAdminImportPassword } from '@/lib/admin-auth';
 import '../globals.css';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
@@ -27,6 +28,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   const messages = await getMessages();
+  const t = await getTranslations('nav');
+  const hasAdminImport = hasAdminImportPassword();
 
   return (
     <html lang={locale} className={geist.variable}>
@@ -37,12 +40,22 @@ export default async function LocaleLayout({ children, params }: Props) {
               <Link href="/" className="font-semibold text-lg text-orange-700 tracking-tight">
                 Sofra
               </Link>
-              <Link
-                href="/recettes"
-                className="text-sm text-stone-600 hover:text-orange-700 transition-colors"
-              >
-                Recettes
-              </Link>
+              <nav className="flex items-center gap-4">
+                <Link
+                  href="/recettes"
+                  className="text-sm text-stone-600 hover:text-orange-700 transition-colors"
+                >
+                  Recettes
+                </Link>
+                {hasAdminImport && (
+                  <Link
+                    href="/admin/import"
+                    className="rounded-full border border-stone-200 px-3 py-1.5 text-xs font-medium text-stone-600 transition hover:border-orange-300 hover:text-orange-700"
+                  >
+                    {t('import')}
+                  </Link>
+                )}
+              </nav>
             </div>
           </header>
           <main className="max-w-3xl mx-auto px-4 py-8">{children}</main>

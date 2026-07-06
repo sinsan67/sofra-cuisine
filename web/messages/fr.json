@@ -1,7 +1,8 @@
 {
   "nav": {
     "home": "Accueil",
-    "recipes": "Recettes"
+    "recipes": "Recettes",
+    "import": "Importer"
   },
   "home": {
     "title": "Sofra Cuisine",
@@ -26,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Admin prive",
     "title": "Importer une recette",
-    "intro": "Flux MVP reserve a l'admin : une source entre, un brouillon sort, puis une revue humaine decide de la suite. Rien n'est enregistre en base a ce stade.",
+    "intro": "Flux MVP reserve a l'admin : une source entre, un brouillon sort, puis une revue humaine decide de la suite. L'URL peut deja etre revue puis enregistree en base; le mode photo viendra ensuite.",
     "logout": "Fermer la session",
     "principles": {
       "securityTitle": "Securite MVP",
@@ -60,6 +61,11 @@
       "body": "Le bloc UX est deja reserve pour le futur flux photo, mais aucun upload n'est branche dans ce premier prototype.",
       "badge": "Bientot"
     },
+    "saved": {
+      "title": "Recette enregistree.",
+      "body": "La recette #{id} a ete creee en base.",
+      "open": "Ouvrir la fiche"
+    },
     "preview": {
       "eyebrow": "Brouillon extrait",
       "openSource": "Ouvrir la source",
@@ -83,9 +89,20 @@
       }
     },
     "review": {
-      "title": "Ecran de revue manuelle",
-      "body": "Le dernier garde-fou manque encore : edition fine puis enregistrement volontaire en base. Le bouton reste volontairement desactive tant que cette etape n'est pas concue proprement.",
-      "cta": "Enregistrement bientot"
+      "title": "Revue manuelle avant enregistrement",
+      "body": "Corrige le brouillon tant qu'il le faut. Une ligne par ingredient, une ligne par etape. L'enregistrement cree ensuite une vraie recette en base.",
+      "cta": "Enregistrer en base",
+      "editableBadge": "Editable",
+      "ingredientsHelp": "Garde une ligne par ingredient. Pour ce MVP, chaque ligne sera conservee telle quelle dans la recette.",
+      "stepsHelp": "Garde une ligne par etape. L'ordre des lignes devient l'ordre de preparation.",
+      "errorTitle": "Enregistrement impossible :",
+      "errorBody": "le brouillon doit au minimum avoir un titre.",
+      "fields": {
+        "name": "Nom",
+        "cuisineType": "Cuisine / famille",
+        "dishType": "Type de plat",
+        "sourceUrl": "URL source"
+      }
     }
   }
 }
