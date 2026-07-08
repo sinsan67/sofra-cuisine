@@ -59,6 +59,12 @@ function decodeHtmlEntities(value: string): string {
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) =>
+      String.fromCodePoint(Number.parseInt(hex, 16)),
+    )
+    .replace(/&#(\d+);/g, (_, decimal: string) =>
+      String.fromCodePoint(Number.parseInt(decimal, 10)),
+    )
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>');
 }
@@ -95,11 +101,19 @@ function parseTitle(html: string): string | null {
 }
 
 function extractJsonLdBlocks(html: string): unknown[] {
-  const matches = html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
   const values: unknown[] = [];
 
+  const matches = html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi);
+
   for (const match of matches) {
-    const raw = match[1]?.trim();
+    const normalizedAttributes = decodeHtmlEntities(match[1] ?? '').toLowerCase();
+
+    if (!normalizedAttributes.includes('type="application/ld+json"') &&
+        !normalizedAttributes.includes("type='application/ld+json'")) {
+      continue;
+    }
+
+    const raw = match[2]?.trim();
 
     if (!raw) continue;
 

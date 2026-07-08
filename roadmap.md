@@ -7,7 +7,7 @@
 - [x] 4 recettes fitness en base (ingrédients à compléter)
 - [x] 5 cocktails au mastic en base (complets)
 - [x] Cadrer puis prototyper une page admin d'import de recettes (URL + photo) protégée par mot de passe léger côté serveur
-- [ ] Valider le flux réel après login sur staging : URL -> brouillon -> revue -> enregistrement
+- [ ] Valider le flux réel après login sur staging : login et affichage du brouillon OK, enregistrement réel en base restant à confirmer
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
 - [ ] Traiter le PDF Ottolenghi (_ressources input/)
@@ -31,10 +31,11 @@
 
 ### Import admin
 - [x] Ajouter une page `/admin/import` protégée par mot de passe simple pour usage privé
-- [ ] Finaliser la sécurité MVP : mot de passe Vercel branché sur le bon déploiement + validation du parcours réel
+- [x] Finaliser la sécurité MVP côté accès : mot de passe Vercel branché sur le bon déploiement + login staging validé en vrai parcours
 - [ ] Supporter 2 entrées : URL de recette et upload photo
 - [x] Ajouter un écran de revue avant toute écriture en base
 - [ ] Valider l'enregistrement réel en base depuis le flux URL
+- [ ] Pousser sur `staging` le correctif d'extraction JSON-LD HTML-encodé (`application&#x2F;ld&#x2B;json`) puis revalider une URL réelle
 - [ ] Utiliser comme support de test UX les captures bureau du 2026-07-04 12.05.57 et 12.19.20
 
 ### Affichage original / enrichi ⭐ (idée clé S003)
