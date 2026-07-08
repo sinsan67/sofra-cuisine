@@ -8,12 +8,25 @@ import {
   isAdminAuthenticated,
 } from '@/lib/admin-auth';
 import { createRecipeFromReview } from '@/lib/admin-recipes';
-import { buildRecipeImportDraftFromUrl, buildRecipeReviewPayload } from '@/lib/recipe-import';
+import {
+  buildRecipeImportDraftFromPhotoUpload,
+  buildRecipeImportDraftFromUrl,
+  buildRecipeReviewPayload,
+} from '@/lib/recipe-import';
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ url?: string; auth?: string; saved?: string; save?: string }>;
+  searchParams: Promise<{
+    url?: string;
+    photo?: string;
+    auth?: string;
+    saved?: string;
+    save?: string;
+    photoError?: string;
+  }>;
 };
+
+const MAX_PHOTO_UPLOAD_BYTES = 8 * 1024 * 1024;
 
 async function loginAction(formData: FormData) {
   'use server';
@@ -57,15 +70,50 @@ async function saveDraftAction(formData: FormData) {
   redirect(`/${locale}/admin/import?saved=${recipeId}`);
 }
 
+async function importPhotoAction(formData: FormData) {
+  'use server';
+
+  const locale = String(formData.get('locale') ?? 'fr');
+  const isAuthenticated = await isAdminAuthenticated();
+
+  if (!isAuthenticated) {
+    redirect(`/${locale}/admin/import?auth=error`);
+  }
+
+  const uploadedFile = formData.get('photo');
+
+  if (!(uploadedFile instanceof File) || uploadedFile.size === 0) {
+    redirect(`/${locale}/admin/import?photoError=missing`);
+  }
+
+  if (!uploadedFile.type.startsWith('image/')) {
+    redirect(`/${locale}/admin/import?photoError=type`);
+  }
+
+  if (uploadedFile.size > MAX_PHOTO_UPLOAD_BYTES) {
+    redirect(`/${locale}/admin/import?photoError=size`);
+  }
+
+  redirect(`/${locale}/admin/import?photo=${encodeURIComponent(uploadedFile.name)}`);
+}
+
+function getPhotoErrorMessage(photoError: string | undefined, t: Awaited<ReturnType<typeof getTranslations>>) {
+  if (photoError === 'missing') return t('photo.errorMissing');
+  if (photoError === 'type') return t('photo.errorType');
+  if (photoError === 'size') return t('photo.errorSize');
+  return null;
+}
+
 export default async function AdminImportPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const { url, auth, saved, save } = await searchParams;
+  const { url, photo, auth, saved, save, photoError } = await searchParams;
   const t = await getTranslations('adminImport');
   const hasPassword = hasAdminImportPassword();
   const isAuthenticated = await isAdminAuthenticated();
 
   let draft = null;
   let previewError: string | null = null;
+  const photoErrorMessage = getPhotoErrorMessage(photoError, t);
 
   if (hasPassword && isAuthenticated && url) {
     try {
@@ -73,6 +121,8 @@ export default async function AdminImportPage({ params, searchParams }: Props) {
     } catch (error) {
       previewError = error instanceof Error ? error.message : t('preview.errorFallback');
     }
+  } else if (hasPassword && isAuthenticated && photo) {
+    draft = buildRecipeImportDraftFromPhotoUpload(photo);
   }
 
   return (
@@ -216,9 +266,31 @@ export default async function AdminImportPage({ params, searchParams }: Props) {
               </p>
               <h2 className="mt-2 text-xl font-semibold text-stone-900">{t('photo.title')}</h2>
               <p className="mt-2 text-sm leading-6 text-stone-600">{t('photo.body')}</p>
-              <div className="mt-5 inline-flex rounded-full bg-white px-3 py-1 text-xs text-stone-500">
-                {t('photo.badge')}
-              </div>
+              {photoErrorMessage && (
+                <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {photoErrorMessage}
+                </p>
+              )}
+              <form action={importPhotoAction} className="mt-5 space-y-4">
+                <input type="hidden" name="locale" value={locale} />
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-stone-700">{t('photo.inputLabel')}</span>
+                  <input
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    required
+                    className="block w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-700 file:mr-3 file:rounded-full file:border-0 file:bg-stone-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+                  />
+                </label>
+                <p className="text-xs leading-5 text-stone-500">{t('photo.help')}</p>
+                <button
+                  type="submit"
+                  className="w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-stone-700"
+                >
+                  {t('photo.submit')}
+                </button>
+              </form>
             </div>
           </section>
 
@@ -237,7 +309,15 @@ export default async function AdminImportPage({ params, searchParams }: Props) {
                   </p>
                   <h2 className="text-2xl font-semibold text-stone-900">{draft.name ?? t('preview.untitled')}</h2>
                   <p className="text-sm text-stone-500">
-                    {draft.sourceDomain} · <a href={draft.sourceUrl} className="underline underline-offset-4">{t('preview.openSource')}</a>
+                    {draft.sourceDomain ?? draft.sourceLabel}
+                    {draft.sourceUrl && (
+                      <>
+                        {' · '}
+                        <a href={draft.sourceUrl} className="underline underline-offset-4">
+                          {t('preview.openSource')}
+                        </a>
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="rounded-2xl bg-stone-50 px-4 py-3 text-sm text-stone-600">
@@ -259,6 +339,7 @@ export default async function AdminImportPage({ params, searchParams }: Props) {
               <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
                 <form action={saveDraftAction} className="contents">
                   <input type="hidden" name="locale" value={locale} />
+                  <input type="hidden" name="sourceFile" value={draft.sourceFile ?? ''} />
                   <div className="space-y-6">
                     <section className="rounded-[24px] bg-stone-50 p-5">
                       <div className="flex items-center justify-between gap-3">

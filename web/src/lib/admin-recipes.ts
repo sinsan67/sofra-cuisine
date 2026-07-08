@@ -33,6 +33,7 @@ export async function createRecipeFromReview(payload: RecipeReviewPayload): Prom
       prep_time,
       cook_time,
       source_url,
+      source_file,
       author,
       notes
     )
@@ -44,6 +45,7 @@ export async function createRecipeFromReview(payload: RecipeReviewPayload): Prom
       ${payload.prepTime},
       ${payload.cookTime},
       ${payload.sourceUrl},
+      ${payload.sourceFile},
       ${payload.author},
       ${payload.notes}
     )

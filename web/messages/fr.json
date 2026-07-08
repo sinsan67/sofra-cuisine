@@ -27,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Admin prive",
     "title": "Importer une recette",
-    "intro": "Flux MVP reserve a l'admin : une source entre, un brouillon sort, puis une revue humaine decide de la suite. L'URL peut deja etre revue puis enregistree en base; le mode photo viendra ensuite.",
+    "intro": "Flux MVP reserve a l'admin : une source entre, un brouillon sort, puis une revue humaine decide de la suite. L'URL est deja exploitable, et le mode photo permet maintenant d'ouvrir un brouillon manuel apres upload.",
     "logout": "Fermer la session",
     "principles": {
       "securityTitle": "Securite MVP",
@@ -35,7 +35,7 @@
       "reviewTitle": "Revue avant base",
       "reviewBody": "L'import automatique sert uniquement a preparer un brouillon lisible. La validation humaine reste obligatoire.",
       "scopeTitle": "Perimetre S013",
-      "scopeBody": "Le mode URL est prototype maintenant. Le mode photo est reserve pour l'etape suivante."
+      "scopeBody": "Le mode URL est deja operationnel. Le mode photo accepte maintenant un upload et ouvre un brouillon manuel, sans extraction automatique pour l'instant."
     },
     "config": {
       "title": "Configuration requise",
@@ -56,10 +56,15 @@
       "submit": "Generer le brouillon"
     },
     "photo": {
-      "eyebrow": "Etape suivante",
+      "eyebrow": "Photo",
       "title": "Importer depuis une photo",
-      "body": "Le bloc UX est deja reserve pour le futur flux photo, mais aucun upload n'est branche dans ce premier prototype.",
-      "badge": "Bientot"
+      "body": "Choisis une photo de recette depuis ton telephone ou ton Mac. Pour ce MVP, le serveur valide l'upload puis ouvre un brouillon manuel a completer.",
+      "inputLabel": "Photo de recette",
+      "help": "Formats image acceptes, taille max 8 Mo. L'image est bien transmise au serveur mais aucune OCR n'est encore lancee.",
+      "submit": "Televerser la photo",
+      "errorMissing": "Ajoute une image avant d'envoyer le formulaire.",
+      "errorType": "Le fichier envoye n'est pas une image reconnue.",
+      "errorSize": "L'image depasse la taille maximale autorisee de 8 Mo."
     },
     "saved": {
       "title": "Recette enregistree.",

@@ -27,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Ozel admin",
     "title": "Tarif ice aktar",
-    "intro": "MVP admin akisi: bir kaynak girer, bir taslak cikar, sonra insan incelemesi sonraki adimi belirler. URL ice aktarma artik gozden gecirilip kaydedilebilir; fotograf akisi sonraki adimdir.",
+    "intro": "MVP admin akisi: bir kaynak girer, bir taslak cikar, sonra insan incelemesi sonraki adimi belirler. URL ice aktarma zaten calisiyor; fotograf modu da artik yukleme sonrasi manuel bir taslak acabiliyor.",
     "logout": "Oturumu kapat",
     "principles": {
       "securityTitle": "MVP guvenligi",
@@ -35,7 +35,7 @@
       "reviewTitle": "DB once inceleme",
       "reviewBody": "Otomatik ice aktarma sadece okunabilir bir taslak hazirlar. Insan dogrulamasi zorunlu kalir.",
       "scopeTitle": "S013 kapsami",
-      "scopeBody": "URL modu simdi prototiplendi. Foto modunun sonraya birakilmasi bilincli."
+      "scopeBody": "URL modu zaten calisiyor. Fotograf modu da artik yukleme kabul edip manuel bir taslak aciyor, ancak otomatik cikarma henuz yok."
     },
     "config": {
       "title": "Gerekli yapilandirma",
@@ -56,10 +56,15 @@
       "submit": "Taslak olustur"
     },
     "photo": {
-      "eyebrow": "Sonraki adim",
+      "eyebrow": "Fotograf",
       "title": "Fotograftan ice aktar",
-      "body": "Bu UX blogu gelecekteki fotograf akisi icin ayrildi, ancak bu ilk prototipte yukleme baglanmadi.",
-      "badge": "Yakinda"
+      "body": "Telefonundan veya bilgisayarindan bir tarif fotografi sec. Bu MVP'de sunucu yuklemeyi dogrular ve manuel olarak doldurulacak bir taslak acar.",
+      "inputLabel": "Tarif fotografi",
+      "help": "Yalnizca resim dosyalari, en fazla 8 MB. Resim sunucuya gonderilir ama henuz OCR calismaz.",
+      "submit": "Fotografi yukle",
+      "errorMissing": "Formu gondermeden once bir resim sec.",
+      "errorType": "Yuklenen dosya desteklenen bir resim degil.",
+      "errorSize": "Resim izin verilen 8 MB sinirini asiyor."
     },
     "saved": {
       "title": "Tarif kaydedildi.",

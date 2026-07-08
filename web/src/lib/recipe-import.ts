@@ -23,8 +23,10 @@ export type ImportedStep = {
 };
 
 export type RecipeImportDraft = {
-  sourceUrl: string;
-  sourceDomain: string;
+  sourceUrl: string | null;
+  sourceDomain: string | null;
+  sourceFile: string | null;
+  sourceLabel: string;
   name: string | null;
   author: string | null;
   notes: string | null;
@@ -47,11 +49,26 @@ export type RecipeReviewPayload = {
   prepTime: number | null;
   cookTime: number | null;
   sourceUrl: string | null;
+  sourceFile: string | null;
   cuisineType: string | null;
   dishType: string | null;
   ingredients: ImportedIngredient[];
   steps: ImportedStep[];
 };
+
+function sanitizeUploadedFileName(fileName: string): string {
+  return fileName.replace(/[^\w.\- ]+/g, ' ').replace(/\s+/g, ' ').trim() || 'photo-recette';
+}
+
+function buildNameFromFileName(fileName: string): string | null {
+  const withoutExtension = fileName.replace(/\.[a-z0-9]+$/i, '');
+  const cleaned = withoutExtension
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return cleaned.length > 0 ? cleaned : null;
+}
 
 function decodeHtmlEntities(value: string): string {
   return value
@@ -242,6 +259,8 @@ export async function buildRecipeImportDraftFromUrl(inputUrl: string): Promise<R
   const draft: RecipeImportDraft = {
     sourceUrl: response.url,
     sourceDomain: new URL(response.url).hostname.replace(/^www\./, ''),
+    sourceFile: null,
+    sourceLabel: new URL(response.url).hostname.replace(/^www\./, ''),
     name: normalizeText(recipe?.name) ?? rawTitle,
     author: getAuthorName(recipe?.author),
     notes: normalizeText(recipe?.description) ?? rawDescription,
@@ -273,6 +292,32 @@ export async function buildRecipeImportDraftFromUrl(inputUrl: string): Promise<R
   }
 
   return draft;
+}
+
+export function buildRecipeImportDraftFromPhotoUpload(fileName: string): RecipeImportDraft {
+  const sanitizedFileName = sanitizeUploadedFileName(fileName);
+
+  return {
+    sourceUrl: null,
+    sourceDomain: null,
+    sourceFile: `upload:${sanitizedFileName}`,
+    sourceLabel: sanitizedFileName,
+    name: buildNameFromFileName(sanitizedFileName),
+    author: null,
+    notes: null,
+    servings: null,
+    prepTime: null,
+    cookTime: null,
+    totalTime: null,
+    ingredients: [],
+    steps: [],
+    rawTitle: null,
+    rawDescription: null,
+    warnings: [
+      'Photo recue par le serveur. L’extraction automatique depuis l’image n’est pas encore branchée.',
+      'Remplis le titre, les ingrédients et les étapes à la main avant enregistrement.',
+    ],
+  };
 }
 
 function normalizeOptionalText(value: string | null | undefined): string | null {
@@ -315,6 +360,7 @@ export function buildRecipeReviewPayload(formData: FormData): RecipeReviewPayloa
     prepTime: normalizeOptionalInteger(String(formData.get('prepTime') ?? '')),
     cookTime: normalizeOptionalInteger(String(formData.get('cookTime') ?? '')),
     sourceUrl: normalizeOptionalText(String(formData.get('sourceUrl') ?? '')),
+    sourceFile: normalizeOptionalText(String(formData.get('sourceFile') ?? '')),
     cuisineType: normalizeOptionalText(String(formData.get('cuisineType') ?? '')),
     dishType: normalizeOptionalText(String(formData.get('dishType') ?? '')),
     ingredients,

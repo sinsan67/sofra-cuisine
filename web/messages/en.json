@@ -27,7 +27,7 @@
   "adminImport": {
     "eyebrow": "Private admin",
     "title": "Import a recipe",
-    "intro": "MVP admin flow: a source goes in, a draft comes out, then a human review decides what happens next. URL imports can now be reviewed and saved; photo import comes next.",
+    "intro": "MVP admin flow: a source goes in, a draft comes out, then a human review decides what happens next. URL imports already work, and photo mode can now open a manual draft after upload.",
     "logout": "Close session",
     "principles": {
       "securityTitle": "MVP security",
@@ -35,7 +35,7 @@
       "reviewTitle": "Review before DB",
       "reviewBody": "Automatic import only prepares a readable draft. Human validation stays mandatory.",
       "scopeTitle": "S013 scope",
-      "scopeBody": "URL mode is prototyped now. Photo mode is intentionally deferred."
+      "scopeBody": "URL mode is already working. Photo mode now accepts an upload and opens a manual draft, without automatic extraction yet."
     },
     "config": {
       "title": "Configuration required",
@@ -56,10 +56,15 @@
       "submit": "Generate draft"
     },
     "photo": {
-      "eyebrow": "Next step",
+      "eyebrow": "Photo",
       "title": "Import from a photo",
-      "body": "The UX block is already reserved for the future photo flow, but no upload is wired in this first prototype.",
-      "badge": "Soon"
+      "body": "Choose a recipe photo from your phone or computer. In this MVP, the server validates the upload and opens a manual draft for review.",
+      "inputLabel": "Recipe photo",
+      "help": "Image files only, max size 8 MB. The image is sent to the server, but no OCR runs yet.",
+      "submit": "Upload photo",
+      "errorMissing": "Add an image before submitting the form.",
+      "errorType": "The uploaded file is not a supported image.",
+      "errorSize": "The image exceeds the maximum allowed size of 8 MB."
     },
     "saved": {
       "title": "Recipe saved.",
