@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -7,8 +6,6 @@ import { routing } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
 import { hasAdminImportPassword } from '@/lib/admin-auth';
 import '../globals.css';
-
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
 
 export const metadata: Metadata = {
   title: 'Sofra Cuisine',
@@ -32,7 +29,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const hasAdminImport = hasAdminImportPassword();
 
   return (
-    <html lang={locale} className={geist.variable}>
+    <html lang={locale}>
       <body className="min-h-screen bg-stone-50 text-stone-800 font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
           <header className="bg-white border-b border-stone-200 sticky top-0 z-10">

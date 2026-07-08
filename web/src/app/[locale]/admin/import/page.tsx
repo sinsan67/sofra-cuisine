@@ -380,7 +380,7 @@ export default async function AdminImportPage({ params, searchParams }: Props) {
                         </label>
                         <label className="block space-y-2 sm:col-span-2">
                           <span className="text-xs uppercase tracking-[0.18em] text-stone-400">{t('review.fields.sourceUrl')}</span>
-                          <input name="sourceUrl" defaultValue={draft.sourceUrl} className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400" />
+                          <input name="sourceUrl" defaultValue={draft.sourceUrl ?? ''} className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-900 outline-none transition focus:border-orange-400" />
                         </label>
                       </div>
 
