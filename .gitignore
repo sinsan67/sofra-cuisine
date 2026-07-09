@@ -23,3 +23,4 @@ _ressources input/
 
 # IDE
 .vscode/
+.claude/

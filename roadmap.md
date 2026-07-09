@@ -7,7 +7,9 @@
 - [x] 4 recettes fitness en base (ingrédients à compléter)
 - [x] 5 cocktails au mastic en base (complets)
 - [x] Cadrer puis prototyper une page admin d'import de recettes (URL + photo) protégée par mot de passe léger côté serveur
-- [ ] Valider le flux réel après login sur staging : login et affichage du brouillon OK, enregistrement réel en base restant à confirmer
+- [x] Valider le flux réel URL sur staging : login OK, brouillon Marmiton OK, enregistrement réel OK, recette publique `#31` visible
+- [x] Débloquer le déploiement Vercel staging du commit `bd3da68` puis redéployer staging avec succès (`eb5071d`)
+- [ ] Retrouver / vérifier la vraie valeur Preview de `ADMIN_IMPORT_PASSWORD` sur Vercel pour pouvoir tester le flux photo réel
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
 - [ ] Traiter le PDF Ottolenghi (_ressources input/)
@@ -32,10 +34,13 @@
 ### Import admin
 - [x] Ajouter une page `/admin/import` protégée par mot de passe simple pour usage privé
 - [x] Finaliser la sécurité MVP côté accès : mot de passe Vercel branché sur le bon déploiement + login staging validé en vrai parcours
-- [ ] Supporter 2 entrées : URL de recette et upload photo
+- [x] Supporter 2 entrées : URL de recette et upload photo
 - [x] Ajouter un écran de revue avant toute écriture en base
-- [ ] Valider l'enregistrement réel en base depuis le flux URL
-- [ ] Pousser sur `staging` le correctif d'extraction JSON-LD HTML-encodé (`application&#x2F;ld&#x2B;json`) puis revalider une URL réelle
+- [x] Valider l'enregistrement réel en base depuis le flux URL
+- [x] Pousser sur `staging` le correctif d'extraction JSON-LD HTML-encodé (`application&#x2F;ld&#x2B;json`) puis revalider une URL réelle
+- [ ] Valider sur staging le nouveau flux photo : upload image -> brouillon manuel -> enregistrement en base
+- [ ] Comprendre pourquoi `sinan` ne crée pas de session admin sur le staging Preview alors que la route est bien active
+- [ ] Décider si le MVP photo sans OCR peut passer en prod, ou s'il faut brancher une vraie extraction avant merge
 - [ ] Utiliser comme support de test UX les captures bureau du 2026-07-04 12.05.57 et 12.19.20
 
 ### Affichage original / enrichi ⭐ (idée clé S003)
