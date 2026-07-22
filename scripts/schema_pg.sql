@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS recipes (
     last_made     TEXT,
     tags          TEXT,
     country_code  TEXT,
-    created_at    TEXT DEFAULT CURRENT_DATE
+    created_at    TEXT DEFAULT CURRENT_DATE,
+    original_locale TEXT DEFAULT 'fr'
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
