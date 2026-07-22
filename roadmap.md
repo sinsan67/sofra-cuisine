@@ -10,9 +10,13 @@
 - [x] Cadrer puis prototyper une page admin d'import de recettes (URL + photo) protégée par mot de passe léger côté serveur
 - [x] Valider le flux réel URL sur staging : login OK, brouillon Marmiton OK, enregistrement réel OK, recette publique `#31` visible
 - [x] Débloquer le déploiement Vercel staging du commit `bd3da68` puis redéployer staging avec succès (`eb5071d`)
-- [ ] Auditer le schéma réellement actif derrière `sofra-cuisine-3` avant toute exécution de la migration documentaire V1
-- [ ] Écrire le script de backfill depuis les tables historiques `recipes*` vers `recipe_documents` et `recipe_structures`
-- [ ] Définir puis brancher la couche de compatibilité lecture côté web à partir des vues `recipe_document_*_compat_v1`
+- [x] Auditer le schéma réellement actif derrière `sofra-cuisine-3` avant toute exécution de la migration documentaire V1
+- [x] Écrire le script de backfill depuis les tables historiques `recipes*` vers `recipe_documents` et `recipe_structures`
+- [x] Définir puis brancher la couche de compatibilité lecture côté web à partir des vues `recipe_document_*_compat_v1`
+- [x] Exécuter la migration V1 sur la base Neon cible après audit du schéma live et validation humaine
+- [ ] Exécuter le backfill documentaire V1 sur Neon (`recipes = 30`, `recipe_documents = 0` juste après migration du 2026-07-22)
+- [ ] Vérifier post-backfill que `recipe_documents >= recipes` puis revalider le front staging sur les vues de compatibilité
+- [ ] Rédiger le fichier de transmission pour l'agent d'import afin qu'il écrive directement les recettes envoyées par Sinan dans le format documentaire cible
 - [ ] Retrouver / vérifier la vraie valeur Preview de `ADMIN_IMPORT_PASSWORD` sur Vercel pour pouvoir tester le flux photo réel
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
@@ -21,7 +25,6 @@
 
 ## Prochain sprint (avant bootstrap web)
 
-- [ ] Exécuter la migration V1 sur la base cible après audit du schéma live et validation humaine
 - [ ] Faire porter au nouvel import photo / PDF les recettes dans `recipe_documents` au lieu d’écrire directement dans `recipes`
 - [ ] Script `generate_obsidian.py` — générer des notes .md par recette dans obsidian/
 - [ ] Valider les étapes `suggested` recette par recette avec Sinan
