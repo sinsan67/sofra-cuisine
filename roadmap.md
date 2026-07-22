@@ -6,9 +6,13 @@
 - [x] 6 recettes originales + étapes (original/suggested) en base
 - [x] 4 recettes fitness en base (ingrédients à compléter)
 - [x] 5 cocktails au mastic en base (complets)
+- [x] Formaliser en SQL la V1 du socle documentaire mutualisé (`document_sources`, `recipe_documents`, provenance, structures recette, publications, vues de compatibilité)
 - [x] Cadrer puis prototyper une page admin d'import de recettes (URL + photo) protégée par mot de passe léger côté serveur
 - [x] Valider le flux réel URL sur staging : login OK, brouillon Marmiton OK, enregistrement réel OK, recette publique `#31` visible
 - [x] Débloquer le déploiement Vercel staging du commit `bd3da68` puis redéployer staging avec succès (`eb5071d`)
+- [ ] Auditer le schéma réellement actif derrière `sofra-cuisine-3` avant toute exécution de la migration documentaire V1
+- [ ] Écrire le script de backfill depuis les tables historiques `recipes*` vers `recipe_documents` et `recipe_structures`
+- [ ] Définir puis brancher la couche de compatibilité lecture côté web à partir des vues `recipe_document_*_compat_v1`
 - [ ] Retrouver / vérifier la vraie valeur Preview de `ADMIN_IMPORT_PASSWORD` sur Vercel pour pouvoir tester le flux photo réel
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)
@@ -17,6 +21,8 @@
 
 ## Prochain sprint (avant bootstrap web)
 
+- [ ] Exécuter la migration V1 sur la base cible après audit du schéma live et validation humaine
+- [ ] Faire porter au nouvel import photo / PDF les recettes dans `recipe_documents` au lieu d’écrire directement dans `recipes`
 - [ ] Script `generate_obsidian.py` — générer des notes .md par recette dans obsidian/
 - [ ] Valider les étapes `suggested` recette par recette avec Sinan
 - [ ] Enrichir les recettes kiyma (id=2-6) avec les vraies épices de maman

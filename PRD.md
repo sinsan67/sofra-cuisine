@@ -152,6 +152,7 @@ Pour un projet de cette nature, les indicateurs sont qualitatifs et comportement
 - Carnet d'idées — notes datées avec liens vers recettes
 - Photos sur les fiches
 - Validation complète du flux admin d'import (login, revue, écriture en base)
+- Migration progressive vers un modèle documentaire mutualisé : socle SQL V1, backfill, compatibilité lecture, puis nouvel import
 
 ### Plus tard
 - Meal planning hebdomadaire dans le web
@@ -197,6 +198,11 @@ Pour un projet de cette nature, les indicateurs sont qualitatifs et comportement
 ### Infrastructure partagée
 
 Ce projet utilise une **base de données Neon partagée** entre les deux implémentations (Claude et Codex). La même `DATABASE_URL` donne accès aux mêmes données.
+
+État au 22 juillet 2026 :
+- le schéma historique centré sur `recipes` existe toujours et reste la base lue par le front actuel
+- une migration SQL V1 du nouveau modèle documentaire mutualisé a été écrite dans `scripts/migrations/2026-07-22_document_model_v1.sql`
+- la séquence cible validée est : socle documentaire -> backfill -> compatibilité lecture -> nouvel import -> bascule front
 
 Règles pour toute nouvelle implémentation :
 - **Lire** les données librement

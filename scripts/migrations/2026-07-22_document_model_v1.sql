@@ -1,114 +1,10 @@
--- Sofra Cuisine — schéma PostgreSQL
--- Adapté depuis schema.sql (SQLite) pour Neon
+-- S010 — V1 du socle documentaire mutualise
+-- Pourquoi :
+-- 1. conserver une source fidele lors des imports photo / PDF / web
+-- 2. separer le document source, la structure recette normalisee et la publication par app
+-- 3. preparer un backfill progressif depuis les tables historiques `recipes*`
 
-CREATE TABLE IF NOT EXISTS ingredients (
-    id            SERIAL PRIMARY KEY,
-    name          TEXT NOT NULL UNIQUE,
-    category      TEXT NOT NULL DEFAULT 'autre',
-    default_unit  TEXT
-);
-
-CREATE TABLE IF NOT EXISTS recipes (
-    id            SERIAL PRIMARY KEY,
-    name          TEXT NOT NULL,
-    cuisine_type  TEXT,
-    dish_type     TEXT,
-    servings      INTEGER DEFAULT 4,
-    prep_time     INTEGER,
-    cook_time     INTEGER,
-    source_url    TEXT,
-    source_file   TEXT,
-    author        TEXT,
-    notes         TEXT,
-    rating        INTEGER CHECK (rating BETWEEN 1 AND 5),
-    made_count    INTEGER DEFAULT 0,
-    last_made     TEXT,
-    tags          TEXT,
-    country_code  TEXT,
-    created_at    TEXT DEFAULT CURRENT_DATE
-);
-
-CREATE TABLE IF NOT EXISTS recipe_ingredients (
-    id            SERIAL PRIMARY KEY,
-    recipe_id     INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-    ingredient_id INTEGER NOT NULL REFERENCES ingredients(id),
-    quantity      REAL,
-    unit          TEXT,
-    optional      INTEGER DEFAULT 0,
-    note          TEXT
-);
-
-CREATE TABLE IF NOT EXISTS meal_plan (
-    id            SERIAL PRIMARY KEY,
-    recipe_id     INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-    planned_date  TEXT NOT NULL,
-    servings      INTEGER DEFAULT 4
-);
-
-CREATE TABLE IF NOT EXISTS pantry (
-    id            SERIAL PRIMARY KEY,
-    ingredient_id INTEGER NOT NULL REFERENCES ingredients(id) UNIQUE,
-    quantity      REAL,
-    unit          TEXT,
-    updated_at    TEXT DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS recipe_steps (
-    id            SERIAL PRIMARY KEY,
-    recipe_id     INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-    step_number   INTEGER NOT NULL,
-    instruction   TEXT NOT NULL,
-    source        TEXT NOT NULL DEFAULT 'original'
-);
-
-CREATE TABLE IF NOT EXISTS recipe_translations (
-    id         SERIAL PRIMARY KEY,
-    recipe_id  INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-    locale     TEXT NOT NULL,
-    name       TEXT NOT NULL,
-    notes      TEXT,
-    UNIQUE (recipe_id, locale)
-);
-
-CREATE TABLE IF NOT EXISTS ingredient_translations (
-    id             SERIAL PRIMARY KEY,
-    ingredient_id  INTEGER NOT NULL REFERENCES ingredients(id) ON DELETE CASCADE,
-    locale         TEXT NOT NULL,
-    name           TEXT NOT NULL,
-    UNIQUE (ingredient_id, locale)
-);
-
-CREATE TABLE IF NOT EXISTS recipe_step_translations (
-    id              SERIAL PRIMARY KEY,
-    recipe_step_id  INTEGER NOT NULL REFERENCES recipe_steps(id) ON DELETE CASCADE,
-    locale          TEXT NOT NULL,
-    instruction     TEXT NOT NULL,
-    UNIQUE (recipe_step_id, locale)
-);
-
-CREATE TABLE IF NOT EXISTS recipe_tags (
-    id         SERIAL PRIMARY KEY,
-    recipe_id  INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
-    tag_group  TEXT NOT NULL,
-    tag_value  TEXT NOT NULL,
-    UNIQUE (recipe_id, tag_group, tag_value)
-);
-
-CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_recipe    ON recipe_ingredients(recipe_id);
-CREATE INDEX IF NOT EXISTS idx_recipe_ingredients_ingredient ON recipe_ingredients(ingredient_id);
-CREATE INDEX IF NOT EXISTS idx_meal_plan_date               ON meal_plan(planned_date);
-CREATE INDEX IF NOT EXISTS idx_recipe_steps_recipe          ON recipe_steps(recipe_id);
-CREATE INDEX IF NOT EXISTS idx_recipe_translations_recipe_locale ON recipe_translations(recipe_id, locale);
-CREATE INDEX IF NOT EXISTS idx_ingredient_translations_ingredient_locale ON ingredient_translations(ingredient_id, locale);
-CREATE INDEX IF NOT EXISTS idx_recipe_step_translations_step_locale ON recipe_step_translations(recipe_step_id, locale);
-CREATE INDEX IF NOT EXISTS idx_recipe_tags_recipe           ON recipe_tags(recipe_id);
-CREATE INDEX IF NOT EXISTS idx_recipe_tags_group_value      ON recipe_tags(tag_group, tag_value);
-
--- ─────────────────────────────────────────
--- S010 — Socle documentaire mutualise
--- ─────────────────────────────────────────
--- Ce bloc est additif : il prepare la migration progressive depuis `recipes`
--- vers un modele "source fidele -> structure recette -> publication par app".
+BEGIN;
 
 CREATE TABLE IF NOT EXISTS document_sources (
     id                 SERIAL PRIMARY KEY,
@@ -292,46 +188,46 @@ CREATE TABLE IF NOT EXISTS recipe_structures (
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredient_groups_v1 (
-    id                  SERIAL PRIMARY KEY,
+    id                 SERIAL PRIMARY KEY,
     recipe_structure_id INTEGER NOT NULL REFERENCES recipe_structures(id) ON DELETE CASCADE,
-    group_order         INTEGER NOT NULL,
-    title               TEXT,
-    raw_title           TEXT,
-    metadata            JSONB NOT NULL DEFAULT '{}'::jsonb,
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    group_order        INTEGER NOT NULL,
+    title              TEXT,
+    raw_title          TEXT,
+    metadata           JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (recipe_structure_id, group_order)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredient_items_v1 (
-    id                  SERIAL PRIMARY KEY,
+    id                 SERIAL PRIMARY KEY,
     ingredient_group_id INTEGER NOT NULL REFERENCES recipe_ingredient_groups_v1(id) ON DELETE CASCADE,
-    ingredient_order    INTEGER NOT NULL,
-    ingredient_id       INTEGER REFERENCES ingredients(id) ON DELETE SET NULL,
-    raw_text            TEXT NOT NULL,
-    ingredient_text     TEXT,
-    quantity_value      NUMERIC(10,3),
-    quantity_text       TEXT,
-    unit_text           TEXT,
-    preparation_text    TEXT,
-    note_text           TEXT,
-    is_optional         BOOLEAN NOT NULL DEFAULT FALSE,
-    metadata            JSONB NOT NULL DEFAULT '{}'::jsonb,
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    ingredient_order   INTEGER NOT NULL,
+    ingredient_id      INTEGER REFERENCES ingredients(id) ON DELETE SET NULL,
+    raw_text           TEXT NOT NULL,
+    ingredient_text    TEXT,
+    quantity_value     NUMERIC(10,3),
+    quantity_text      TEXT,
+    unit_text          TEXT,
+    preparation_text   TEXT,
+    note_text          TEXT,
+    is_optional        BOOLEAN NOT NULL DEFAULT FALSE,
+    metadata           JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (ingredient_group_id, ingredient_order)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_instructions_v1 (
-    id                  SERIAL PRIMARY KEY,
+    id                 SERIAL PRIMARY KEY,
     recipe_structure_id INTEGER NOT NULL REFERENCES recipe_structures(id) ON DELETE CASCADE,
-    step_number         INTEGER NOT NULL,
-    title               TEXT,
-    raw_text            TEXT NOT NULL,
-    instruction_text    TEXT,
-    source_kind         TEXT NOT NULL DEFAULT 'original' CHECK (
+    step_number        INTEGER NOT NULL,
+    title              TEXT,
+    raw_text           TEXT NOT NULL,
+    instruction_text   TEXT,
+    source_kind        TEXT NOT NULL DEFAULT 'original' CHECK (
         source_kind IN ('original', 'normalized', 'suggested')
     ),
-    metadata            JSONB NOT NULL DEFAULT '{}'::jsonb,
-    created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    metadata           JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (recipe_structure_id, step_number, source_kind)
 );
 
@@ -445,3 +341,5 @@ SELECT
 FROM recipe_instructions_v1 ri
 JOIN recipe_structures rs
     ON rs.id = ri.recipe_structure_id;
+
+COMMIT;
