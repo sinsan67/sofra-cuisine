@@ -14,9 +14,9 @@
 - [x] Écrire le script de backfill depuis les tables historiques `recipes*` vers `recipe_documents` et `recipe_structures`
 - [x] Définir puis brancher la couche de compatibilité lecture côté web à partir des vues `recipe_document_*_compat_v1`
 - [x] Exécuter la migration V1 sur la base Neon cible après audit du schéma live et validation humaine
-- [ ] Exécuter le backfill documentaire V1 sur Neon (`recipes = 30`, `recipe_documents = 0` juste après migration du 2026-07-22)
-- [ ] Vérifier post-backfill que `recipe_documents >= recipes` puis revalider le front staging sur les vues de compatibilité
-- [ ] Rédiger le fichier de transmission pour l'agent d'import afin qu'il écrive directement les recettes envoyées par Sinan dans le format documentaire cible
+- [x] Exécuter le backfill documentaire V1 sur Neon (`recipes = 30`, `recipe_documents = 30`, `recipe_structures = 30`, `ingredient_items = 227`, `instructions = 132`, contrôlé le 2026-07-22)
+- [x] Vérifier post-backfill que `recipe_documents >= recipes` puis revalider le front staging sur les vues de compatibilité (`/fr/recettes` = `30 résultats`, fiche `#1 Quiche à la tomate` OK le 2026-07-22)
+- [x] Rédiger le fichier de transmission pour l'agent d'import afin qu'il écrive directement les recettes envoyées par Sinan dans le format documentaire cible
 - [ ] Retrouver / vérifier la vraie valeur Preview de `ADMIN_IMPORT_PASSWORD` sur Vercel pour pouvoir tester le flux photo réel
 - [ ] Ingrédients des 4 recettes fitness à compléter (quand Sinan retrouve ses notes)
 - [ ] Trancher le concept `cuisine_type` (nationalité vs famille culinaire)

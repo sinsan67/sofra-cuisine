@@ -75,7 +75,7 @@ def ensure_document_model_exists(cur) -> None:
           )
         """
     )
-    present = {row[0] for row in cur.fetchall()}
+    present = {row["table_name"] for row in cur.fetchall()}
     required = {
         "document_sources",
         "recipe_documents",
